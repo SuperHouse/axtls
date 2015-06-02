@@ -164,7 +164,18 @@ int get_file(const char *filename, uint8_t **buf);
 #if defined(CONFIG_SSL_FULL_MODE) || defined(WIN32) || defined(CONFIG_DEBUG)
 EXP_FUNC void STDCALL print_blob(const char *format, const uint8_t *data, int size, ...);
 #else
-    #define print_blob(...)
+static inline void print_blob(const char *header, const uint8_t *data, int size)
+{
+    printf("%s (0x%x)", header, size);
+    for(int i = 0; i < size; i++) {
+	if(i % 16 == 0)
+	    printf("\r\n%04x: ", i);
+	else if(i % 8 == 0)
+	    printf("  ");
+	printf("%02x ", data[i]);
+    }
+    printf("\r\n");
+}
 #endif
 
 EXP_FUNC int STDCALL base64_decode(const char *in,  int len,
