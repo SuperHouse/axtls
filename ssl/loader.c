@@ -41,7 +41,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "os_port.h"
+#include <os_port.h>
 #include "ssl.h"
 
 static int do_obj(SSL_CTX *ssl_ctx, int obj_type, 
