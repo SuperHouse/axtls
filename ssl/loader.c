@@ -121,6 +121,22 @@ EXP_FUNC int STDCALL ssl_obj_memory_load(SSL_CTX *ssl_ctx, int mem_type,
 }
 
 /*
+ * Transfer binary data into the object loader without copying it.
+ *
+ * 'data' must be mutable.
+ */
+EXP_FUNC int STDCALL ssl_obj_memory_load_nocopy(SSL_CTX *ssl_ctx, int mem_type, 
+        uint8_t *data, int len, const char *password)
+{
+    int ret;
+    SSLObjLoader ssl_obj = { .buf =data,
+			     .len = len };
+    ret = do_obj(ssl_ctx, mem_type, &ssl_obj, password);
+    return ret;
+}
+
+
+/*
  * Actually work out what we are doing 
  */
 static int do_obj(SSL_CTX *ssl_ctx, int obj_type, 

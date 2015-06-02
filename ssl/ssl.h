@@ -461,6 +461,27 @@ EXP_FUNC int STDCALL ssl_obj_load(SSL_CTX *ssl_ctx, int obj_type, const char *fi
  */
 EXP_FUNC int STDCALL ssl_obj_memory_load(SSL_CTX *ssl_ctx, int obj_type, const uint8_t *data, int len, const char *password);
 
+/**
+ * @brief Process binary data
+ *
+ * Load private key, certificate, etc. from buffer into memory.
+ *
+ * This function is identical to @ref ssl_obj_memory_load but the data buffer is mutable
+ * and may be manipulated directly. Saves a duplicate allocation on low-memory systems.
+ *
+ * Caller cannot trust the value of 'data' after the function returns, contents may be
+ * sensitive.
+ *
+ * @param ssl_ctx [in] The client/server context.
+ * @param obj_type [in] The format of the memory data.
+ * @param data [in] The binary data to be loaded.
+ * @param len [in] The amount of data to be loaded.
+ * @param password [in] The password used. Can be null if not required.
+ * @return SSL_OK if all ok
+ * @see ssl_obj_load for more details on obj_type.
+ */
+EXP_FUNC int STDCALL ssl_obj_memory_load_nocopy(SSL_CTX *ssl_ctx, int obj_type, uint8_t *data, int len, const char *password);
+
 #ifdef CONFIG_SSL_GENERATE_X509_CERT
 /**
  * @brief Create an X.509 certificate. 
