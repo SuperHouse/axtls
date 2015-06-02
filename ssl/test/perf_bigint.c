@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     int res = 1;
     struct timeval tv_old, tv_new;
     const char *plaintext;
-    uint8_t compare[MAX_KEY_BYTE_SIZE];
+    uint8_t compare[CONFIG_MAX_KEY_BYTE_SIZE];
     int i, max_biggie = 10;    /* really crank performance */
     int len; 
     uint8_t *buf;

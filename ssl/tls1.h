@@ -74,8 +74,14 @@ extern "C" {
 #define CLR_SSL_FLAG(A)             (ssl->flag &= ~A)
 #define IS_SET_SSL_FLAG(A)          (ssl->flag & A)
 
-#define MAX_KEY_BYTE_SIZE           512     /* for a 4096 bit key */
-#define RT_MAX_PLAIN_LENGTH         16384
+#ifndef CONFIG_MAX_KEY_BYTE_SIZE
+#define CONFIG_MAX_KEY_BYTE_SIZE           512     /* for a 4096 bit key */
+#endif
+
+#ifndef CONFIG_MAX_PLAIN_LENGTH
+#define CONFIG_MAX_PLAIN_LENGTH     16384
+#endif
+
 #define RT_EXTRA                    1024
 #define BM_RECORD_OFFSET            5
 
@@ -175,7 +181,7 @@ struct _SSL
     const cipher_info_t *cipher_info;
     void *encrypt_ctx;
     void *decrypt_ctx;
-    uint8_t bm_all_data[RT_MAX_PLAIN_LENGTH+RT_EXTRA];
+    uint8_t bm_all_data[CONFIG_MAX_PLAIN_LENGTH+RT_EXTRA];
     uint8_t *bm_data;
     uint16_t bm_index;
     uint16_t bm_read_index;

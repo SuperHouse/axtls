@@ -596,7 +596,7 @@ static int BIGINT_test(BI_CTX *ctx)
 #ifndef CONFIG_INTEGER_16BIT 
     bigint *bi_data, *bi_exp, *bi_res;
     const char *expnt, *plaintext, *mod;
-    uint8_t compare[MAX_KEY_BYTE_SIZE];
+    uint8_t compare[CONFIG_MAX_KEY_BYTE_SIZE];
     /**
      * 512 bit key
      */

@@ -315,8 +315,8 @@ EXP_FUNC int STDCALL ssl_write(SSL *ssl, const uint8_t *out_data, int out_len)
     {
         nw = n;
 
-        if (nw > RT_MAX_PLAIN_LENGTH)    /* fragment if necessary */
-            nw = RT_MAX_PLAIN_LENGTH;
+        if (nw > CONFIG_MAX_PLAIN_LENGTH)    /* fragment if necessary */
+            nw = CONFIG_MAX_PLAIN_LENGTH;
 
         if ((i = send_packet(ssl, PT_APP_PROTOCOL_DATA, 
                                             &out_data[tot], nw)) <= 0)
@@ -1271,7 +1271,7 @@ int basic_read(SSL *ssl, uint8_t **in_data)
         ssl->need_bytes = (buf[3] << 8) + buf[4];
 
         /* do we violate the spec with the message size?  */
-        if (ssl->need_bytes > RT_MAX_PLAIN_LENGTH+RT_EXTRA-BM_RECORD_OFFSET)
+        if (ssl->need_bytes > CONFIG_MAX_PLAIN_LENGTH+RT_EXTRA-BM_RECORD_OFFSET)
         {
             ret = SSL_ERROR_INVALID_PROT_MSG;              
             goto error;

@@ -374,7 +374,7 @@ static int process_client_key_xchg(SSL *ssl)
     uint8_t *buf = &ssl->bm_data[ssl->dc->bm_proc_index];
     int pkt_size = ssl->bm_index;
     int premaster_size, secret_length = (buf[2] << 8) + buf[3];
-    uint8_t premaster_secret[MAX_KEY_BYTE_SIZE];
+    uint8_t premaster_secret[CONFIG_MAX_KEY_BYTE_SIZE];
     RSA_CTX *rsa_ctx = ssl->ssl_ctx->rsa_ctx;
     int offset = 4;
     int ret = SSL_OK;
@@ -447,7 +447,7 @@ static int process_cert_verify(SSL *ssl)
 {
     uint8_t *buf = &ssl->bm_data[ssl->dc->bm_proc_index];
     int pkt_size = ssl->bm_index;
-    uint8_t dgst_buf[MAX_KEY_BYTE_SIZE];
+    uint8_t dgst_buf[CONFIG_MAX_KEY_BYTE_SIZE];
     uint8_t dgst[MD5_SIZE+SHA1_SIZE];
     X509_CTX *x509_ctx = ssl->x509_ctx;
     int ret = SSL_OK;
