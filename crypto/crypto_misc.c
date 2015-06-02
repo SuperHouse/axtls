@@ -165,6 +165,11 @@ EXP_FUNC int STDCALL get_random(int num_rand_bytes, uint8_t *rand_data)
 #elif defined(WIN32) && defined(CONFIG_WIN32_USE_CRYPTO_LIB)
     /* use Microsoft Crypto Libraries */
     CryptGenRandom(gCryptProv, num_rand_bytes, rand_data);
+#elif defined(CONFIG_USE_RAND)
+    int i;
+    for(i = 0; i < num_rand_bytes; i++)
+	rand_data[i] = (uint8_t)rand();
+    return 0;
 #else   /* nothing else to use, so use a custom RNG */
     /* The method we use when we've got nothing better. Use RC4, time 
        and a couple of random seeds to generate a random sequence */
