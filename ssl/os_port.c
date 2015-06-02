@@ -95,7 +95,9 @@ EXP_FUNC int STDCALL getdomainname(char *buf, int buf_size)
 #undef calloc
 
 static const char * out_of_mem_str = "out of memory";
+#ifndef CONFIG_NO_FILESYSTEM
 static const char * file_open_str = "Could not open file \"%s\"";
+#endif
 
 /* 
  * Some functions that call display some error trace and then call abort().
@@ -132,6 +134,8 @@ EXP_FUNC void * STDCALL ax_calloc(size_t n, size_t s)
     return x;
 }
 
+#ifndef CONFIG_NO_FILESYSTEM
+
 EXP_FUNC int STDCALL ax_open(const char *pathname, int flags)
 {
     int x;
@@ -141,6 +145,8 @@ EXP_FUNC int STDCALL ax_open(const char *pathname, int flags)
 
     return x;
 }
+
+#endif
 
 /**
  * This is a call which will deliberately exit an application, but will

@@ -442,7 +442,9 @@ EXP_FUNC int STDCALL ssl_renegotiate(SSL *ssl);
  * @return SSL_OK if all ok
  * @note Not available in skeleton build mode.
  */
+#ifndef CONFIG_NO_FILESYSTEM
 EXP_FUNC int STDCALL ssl_obj_load(SSL_CTX *ssl_ctx, int obj_type, const char *filename, const char *password);
+#endif
 
 /**
  * @brief Process binary data.

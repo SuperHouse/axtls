@@ -51,6 +51,8 @@ static int ssl_obj_PEM_load(SSL_CTX *ssl_ctx, int obj_type,
                         SSLObjLoader *ssl_obj, const char *password);
 #endif
 
+#ifndef CONFIG_NO_FILESYSTEM
+
 /*
  * Load a file into memory that is in binary DER (or ascii PEM) format.
  */
@@ -97,6 +99,8 @@ error:
     return SSL_ERROR_NOT_SUPPORTED;
 #endif /* CONFIG_SSL_SKELETON_MODE */
 }
+
+#endif /* CONFIG_NO_FILESYSTEM */
 
 /*
  * Transfer binary data into the object loader.
@@ -423,6 +427,7 @@ int load_key_certs(SSL_CTX *ssl_ctx)
     };
 #endif
 
+#ifndef CONFIG_NO_FILESYSTEM
     /* do the private key first */
     if (strlen(CONFIG_SSL_PRIVATE_KEY_LOCATION) > 0)
     {
@@ -431,14 +436,15 @@ int load_key_certs(SSL_CTX *ssl_ctx)
                                 CONFIG_SSL_PRIVATE_KEY_PASSWORD)) < 0)
             goto error;
     }
-    else if (!(options & SSL_NO_DEFAULT_KEY))
+    else
+#endif
+    if (!(options & SSL_NO_DEFAULT_KEY))
     {
 #if defined(CONFIG_SSL_USE_DEFAULT_KEY) || defined(CONFIG_SSL_SKELETON_MODE)
         static const    /* saves a few more bytes */
 #include "private_key.h"
-
         ssl_obj_memory_load(ssl_ctx, SSL_OBJ_RSA_KEY, default_private_key,
-                default_private_key_len, NULL); 
+                default_private_key_len, NULL);
 #endif
     }
 
@@ -453,13 +459,16 @@ int load_key_certs(SSL_CTX *ssl_ctx)
     ssl_obj_memory_load(ssl_ctx, SSL_OBJ_X509_CERT, cert_data, cert_size, NULL);
     free(cert_data);
 #else
+#ifndef CONFIG_NO_FILESYSTEM
     if (strlen(CONFIG_SSL_X509_CERT_LOCATION))
     {
         if ((ret = ssl_obj_load(ssl_ctx, SSL_OBJ_X509_CERT, 
                                 CONFIG_SSL_X509_CERT_LOCATION, NULL)) < 0)
             goto error;
     }
-    else if (!(options & SSL_NO_DEFAULT_KEY))
+    else
+#endif
+    if (!(options & SSL_NO_DEFAULT_KEY))
     {
 #if defined(CONFIG_SSL_USE_DEFAULT_KEY) || defined(CONFIG_SSL_SKELETON_MODE)
         static const    /* saves a few bytes and RAM */
@@ -470,7 +479,9 @@ int load_key_certs(SSL_CTX *ssl_ctx)
     }
 #endif
 
+#ifndef CONFIG_NO_FILESYSTEM
 error:
+#endif
 #ifdef CONFIG_SSL_FULL_MODE
     if (ret)
     {
